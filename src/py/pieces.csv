@@ -1,0 +1,13 @@
+Piece number,Symbol,Capitalized name,Folder,File symbol
+1,,Pawn,fide,P
+2,K,King,fide,K
+3,R,Rook,fide,R
+4,N,Knight,fide,N
+5,B,Bishop,fide,B
+6,Q,Queen,fide,Q
+7,,Pawn,clob,P
+8,K,King,clob,K
+9,BD,Bede,clob,R
+10,FA,FAD,clob,N
+11,WA,Waffle,clob,B
+12,CA,Cardinal,clob,Q

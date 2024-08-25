@@ -1,0 +1,20 @@
+License
+-------
+
+CC BY-NC-SA 4.0, more info may be found at
+https://creative-commons.org/licenses/by-nc-sa/4.0/
+
+This software is provided "as-is", and comes with absolutely no warranty. The
+user assumes all risk associated with compiling and running this program.
+
+Chess With Different Armies
+---------------------------
+By Ralph Betza. Links to the original posts for each army are listed under
+their respective entries in the readme file.
+
+FIDE piece set
+--------------
+caliente piece set
+
+Author: Leonid Gordenin "avi" (https://github.com/avi-0)
+License: CC BY-NC-SA 4.0 (https://creative-commons.org/licenses/by-nc-sa/4.0/)
