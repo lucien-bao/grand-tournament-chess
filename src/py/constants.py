@@ -1,12 +1,15 @@
 """Global constants."""
 
 import pygame
+import pygame.freetype
+from pygame.freetype import Font
 
 #===============================================================================
 # Graphics settings
 #===============================================================================
 FRAME_RATE = 60
 RESOLUTIONS = (
+    (1536, 960),
     (1920, 1200),
     (1920, 1080),
     (1600, 1000),
@@ -16,13 +19,14 @@ RESOLUTIONS = (
 )
 APP_ICON_PATH = "../../res/pieces/fide/icon.png"
 
+
 #===============================================================================
 # Piece dictionary
 #===============================================================================
 class Piece:
-    def __init__(self, id: int, symbol: str, name: str,
+    def __init__(self, code: int, symbol: str, name: str,
                  army: str, file: str) -> None:
-        self.id = id
+        self.code = code
         self.symbol = symbol
         self.name = name
         self.army = army
@@ -31,24 +35,51 @@ class Piece:
         self.black = pygame.image.load(f"../../res/pieces/{army}/b{file}.png")
         self.white = pygame.image.load(f"../../res/pieces/{army}/w{file}.png")
 
-PIECES: list[Piece] = None
+
 with open("pieces.csv") as csv:
-    csv.readline() # discard header line
+    csv.readline()  # discard header line
     data: list[str] = csv.readlines()
     PIECES = [Piece(*line.strip().split(",")) for line in data]
 
 #===============================================================================
 # Color presets
 #===============================================================================
-C_BACKGROUND_DARK = (50, 50, 50)
+C_BACKGROUND_DARK = (30, 30, 30)
 C_BACKGROUND_LIGHT = (210, 210, 210)
-C_TEXT_DARK = (200, 200, 200)
-C_TEXT_LIGHT = (50, 50, 50)
+C_TEXT_DARK = (255, 255, 255)
+C_TEXT_LIGHT = (0, 0, 0)
+C_BUTTON_DARK = (60, 60, 60)
+C_BUTTON_LIGHT = (160, 160, 160)
+C_BUTTON_HOVER_DARK = (50, 50, 50)
+C_BUTTON_HOVER_LIGHT = (140, 140, 140)
+C_BUTTON_PRESSED_DARK = (40, 40, 40)
+C_BUTTON_PRESSED_LIGHT = (100, 100, 100)
 
 C_DARK_SQUARE = (80, 30, 80)
 C_LIGHT_SQUARE = (180, 180, 180)
 
 #===============================================================================
+# Fonts
+#===============================================================================
+pygame.freetype.init()
+F_BODY = Font("../../res/font/Roboto-Medium.ttf", 48)
+
+#===============================================================================
 # Events
 #===============================================================================
 # TODO
+
+#===============================================================================
+# Screens
+#===============================================================================
+MENU = 0
+
+#===============================================================================
+# Miscellaneous
+#===============================================================================
+CORNER = 0
+LEFT = 1
+CENTER = 2
+RIGHT = 3
+
+BUTTON_PADDING = 20

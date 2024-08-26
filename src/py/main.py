@@ -1,10 +1,10 @@
 """Entry point of the program."""
 
 import sys
-import pygame
 from pygame.locals import *
 
-from constants import *
+from settings import *
+import menu
 
 #===============================================================================
 # Setup
@@ -18,22 +18,16 @@ clock: pygame.time.Clock = pygame.time.Clock()
 
 pygame.display.set_icon(
     pygame.image.load(APP_ICON_PATH)
-                .convert_alpha()
+    .convert_alpha()
 )
+
+screen = MENU
 
 
 def handle_events() -> None:
     """
     Polls all events from the pygame event queue and handles
     dispatches.
-
-    Parameters
-    ---
-    (no parameters)
-
-    Returns
-    ---
-    None
     """
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -44,20 +38,13 @@ def handle_events() -> None:
 def draw() -> None:
     """
     Handles all display.
-
-    Parameters
-    ---
-    (no parameters)
-
-    Returns
-    ---
-    None
     """
-    display.fill(C_BACKGROUND_DARK)
+    display.fill(C_BACKGROUND_DARK if get_dark_mode()
+                 else C_BACKGROUND_LIGHT)
     # TODO: draw board + ui
 
-    # DEBUG: testing display :)
-    display.blit(PIECES[11].white, (10, 10))
+    if screen == MENU:
+        menu.display(display)
 
     pygame.display.update()
 
