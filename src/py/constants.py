@@ -62,7 +62,8 @@ C_LIGHT_SQUARE = (180, 180, 180)
 # Fonts
 #===============================================================================
 pygame.freetype.init()
-F_BODY = Font("../../res/font/Roboto-Medium.ttf", 48)
+F_TITLE = Font("../../res/font/Roboto-Medium.ttf", 96)
+F_BUTTON = Font("../../res/font/Roboto-Medium.ttf", 48)
 
 #===============================================================================
 # Events
@@ -77,7 +78,7 @@ MENU = 0
 #===============================================================================
 # Miscellaneous
 #===============================================================================
-CORNER = 0
+CORNER = 0  # for labels, aligns with the BOTTOM left, not top left
 LEFT = 1
 CENTER = 2
 RIGHT = 3

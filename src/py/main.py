@@ -45,6 +45,7 @@ def draw() -> None:
 
     if screen == MENU:
         menu.display(display)
+        menu.update()
 
     pygame.display.update()
 

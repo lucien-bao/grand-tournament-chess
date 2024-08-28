@@ -2,6 +2,7 @@
 import pygame.mouse
 from pygame import Surface, Rect
 from pygame.freetype import STYLE_DEFAULT
+from pygame.event import post, Event
 
 from settings import *
 
@@ -43,7 +44,7 @@ class Label:
         )
 
         if get_text_mode() == CORNER:
-            surface.blit(render[0], self.position)
+            surface.blit(render[0], (self.position[0], self.position[1] - render[1].height))
         elif get_text_mode() == CENTER:
             surface.blit(render[0],
                          center(self.position, render[1]))
@@ -51,7 +52,8 @@ class Label:
 
 class Button:
     def __init__(self, text: str, position: tuple[float, float],
-                 font: Font, dimensions: tuple[float, float] = None,
+                 font: Font, event_type: int = None,
+                 dimensions: tuple[float, float] = None,
                  text_align: bool = LEFT) -> None:
         """
         Constructor.
@@ -59,9 +61,13 @@ class Button:
         :param text: button text.
         :param position: button (x, y) coordinates.
         :param font: font family of button text.
-        :param dimensions: button size (optional).
-        :param text_align: alignment of text within button. Ignored if
-                           dimensions is set to None.
+        :param event_type: (optional) event type (ID number) to post when
+                           this button is clicked.
+        :param dimensions: (optional) button size.
+        :param text_align: (optional) alignment of text within button. Ignored
+                           if dimensions is set to None. May be LEFT, CENTER,
+                           or RIGHT; other values may result in undefined
+                           behavior.
         """
         self.text = text
         self.position = position
@@ -78,9 +84,14 @@ class Button:
             )
             bounds = render[1]
             self.dimensions = (bounds.width + 2 * BUTTON_PADDING,
-                               bounds.height + 2 * BUTTON_PADDING)
+                               self.font.size + 2 * BUTTON_PADDING)
+            self.dimensionsFlag = False
         else:
             self.dimensions = dimensions
+            self.dimensionsFlag = True
+
+        self.text_align = text_align
+        self.event_type = event_type
 
     def draw(self, surface: Surface) -> None:
         """
@@ -96,6 +107,15 @@ class Button:
             rotation=0,
             size=self.font.size
         )
+        if not self.dimensionsFlag:
+            x_adjust = BUTTON_PADDING
+        elif self.text_align == LEFT:
+            x_adjust = BUTTON_PADDING
+        elif self.text_align == CENTER:
+            x_adjust = (self.dimensions[0] - render[1].width) / 2
+        else:  # self.text_align == RIGHT
+            x_adjust = self.dimensions[0] - render[1].width - BUTTON_PADDING
+        y_adjust = (self.dimensions[1] - self.font.size) / 2 if self.dimensionsFlag else BUTTON_PADDING
 
         if get_button_mode() == CORNER:
             pygame.draw.rect(
@@ -106,8 +126,8 @@ class Button:
             )
             surface.blit(
                 render[0],
-                (self.position[0] + BUTTON_PADDING,
-                 self.position[1] + BUTTON_PADDING)
+                (self.position[0] + x_adjust,
+                 self.position[1] + y_adjust)
             )
         elif get_button_mode() == CENTER:
             pygame.draw.rect(
@@ -116,16 +136,25 @@ class Button:
                 Rect(self.position[0] - self.dimensions[0] / 2,
                      self.position[1] - self.dimensions[1] / 2,
                      self.dimensions[0],
-                     self.dimensions[1]
-                     )
+                     self.dimensions[1])
             )
             surface.blit(
                 render[0],
-                (self.position[0] - self.dimensions[0] / 2 + BUTTON_PADDING,
-                 self.position[1] - self.dimensions[1] / 2 + BUTTON_PADDING,
+                (self.position[0] - self.dimensions[0] / 2 + x_adjust,
+                 self.position[1] - self.dimensions[1] / 2 + y_adjust,
                  self.dimensions[0],
                  self.dimensions[1])
             )
+
+    def check_click(self) -> None:
+        """
+        Should be called on each frame; checks if this button is clicked,
+        and if so, posts this button's event.
+        """
+        if self.event_type is None:
+            return
+        if self.is_pressed():
+            post(Event(self.event_type))
 
     def is_hovered(self) -> bool:
         """
@@ -175,6 +204,7 @@ class Button:
             if self.is_hovered():
                 return C_BUTTON_HOVER_LIGHT
             return C_BUTTON_LIGHT
+
 
 class Transition:
     pass
