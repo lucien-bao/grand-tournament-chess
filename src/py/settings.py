@@ -5,6 +5,7 @@ from constants import *
 _dark_mode: bool = True
 _text_mode: int = CORNER
 _button_mode: int = CORNER
+_resolution: tuple[int, int] = RESOLUTIONS[0]
 
 
 def get_dark_mode() -> bool:
@@ -66,3 +67,22 @@ def set_button_mode(value: int) -> None:
     """
     global _button_mode
     _button_mode = value
+
+
+def get_resolution() -> tuple[int, int]:
+    """
+    Get the current resolution.
+
+    :return: the current resolution.
+    """
+    return _resolution
+
+
+def set_resolution(value: tuple[int, int]) -> None:
+    """
+    Change the current resolution.
+
+    :param value: the desired resolution.
+    """
+    global _resolution
+    _resolution = value

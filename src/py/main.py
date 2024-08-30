@@ -12,7 +12,6 @@ import menu
 pygame.init()
 pygame.display.set_caption("Grand Tournament Chess")
 
-resolution: tuple[int, int] = RESOLUTIONS[0]
 display: pygame.Surface = pygame.display.set_mode()
 clock: pygame.time.Clock = pygame.time.Clock()
 
@@ -22,6 +21,7 @@ pygame.display.set_icon(
 )
 
 screen = MENU
+set_resolution(RESOLUTIONS[2])  # TODO
 
 
 def handle_events() -> None:

@@ -1,6 +1,7 @@
 """Global constants."""
 
 import pygame
+from pygame.locals import USEREVENT
 import pygame.freetype
 from pygame.freetype import Font
 
@@ -26,7 +27,7 @@ APP_ICON_PATH = "../../res/pieces/fide/icon.png"
 class Piece:
     def __init__(self, code: int, symbol: str, name: str,
                  army: str, file: str) -> None:
-        self.code = code
+        self.code = int(code)
         self.symbol = symbol
         self.name = name
         self.army = army
@@ -40,6 +41,11 @@ with open("pieces.csv") as csv:
     csv.readline()  # discard header line
     data: list[str] = csv.readlines()
     PIECES = [Piece(*line.strip().split(",")) for line in data]
+
+PIECE_MAP = {piece.name.lower(): piece.code for piece in PIECES}
+
+ICONS = [pygame.image.load(f"../../res/pieces/{folder}/icon.png")
+         for folder in ["fide", "clob"]]
 
 #===============================================================================
 # Color presets
@@ -68,7 +74,11 @@ F_BUTTON = Font("../../res/font/Roboto-Medium.ttf", 48)
 #===============================================================================
 # Events
 #===============================================================================
-# TODO
+GO_MENU = USEREVENT
+GO_PLAY = USEREVENT + 1
+GO_TUTORIAL = USEREVENT + 2
+GO_OPTIONS = USEREVENT + 3
+GO_CREDITS = USEREVENT + 4
 
 #===============================================================================
 # Screens
