@@ -1,9 +1,12 @@
 """Entry point of the program."""
 
 import sys
+
+import pygame.display
 from pygame.locals import *
 
-from settings import *
+from constants import *
+import settings
 import menu
 
 #===============================================================================
@@ -21,7 +24,10 @@ pygame.display.set_icon(
 )
 
 screen = MENU
-set_resolution(RESOLUTIONS[2])  # TODO
+settings.set_dark_mode(True)
+settings.set_text_mode(CORNER)
+settings.set_button_mode(CORNER)
+settings.set_resolution(pygame.display.get_window_size())
 
 
 def handle_events() -> None:
@@ -39,7 +45,7 @@ def draw() -> None:
     """
     Handles all display.
     """
-    display.fill(C_BACKGROUND_DARK if get_dark_mode()
+    display.fill(C_BACKGROUND_DARK if settings.get_dark_mode()
                  else C_BACKGROUND_LIGHT)
     # TODO: draw board + ui
 

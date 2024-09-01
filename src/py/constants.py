@@ -9,15 +9,6 @@ from pygame.freetype import Font
 # Graphics settings
 #===============================================================================
 FRAME_RATE = 60
-RESOLUTIONS = (
-    (1536, 960),
-    (1920, 1200),
-    (1920, 1080),
-    (1600, 1000),
-    (1600, 900),
-    (1280, 720),
-    (800, 600),
-)
 APP_ICON_PATH = "../../res/pieces/fide/icon.png"
 
 
@@ -93,4 +84,4 @@ LEFT = 1
 CENTER = 2
 RIGHT = 3
 
-BUTTON_PADDING = 20
+BUTTON_PADDING_SCALAR = 0.02

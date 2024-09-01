@@ -4,7 +4,8 @@ from pygame import Surface, Rect
 from pygame.freetype import STYLE_DEFAULT
 from pygame.event import post, Event
 
-from settings import *
+from constants import *
+import settings
 
 
 def center(corner: tuple[float, float],
@@ -21,7 +22,7 @@ class Label:
         Constructor.
 
         :param text: label text.
-        :param position: label (x, y) coordinates.
+        :param position: label (x, y) relative position.
         :param font: font family of label text.
         """
         self.text = text
@@ -34,20 +35,32 @@ class Label:
 
         :param surface: pygame Surface to draw onto.
         """
+        x, y = (self.position[0] * settings.get_resolution()[0],
+                self.position[1] * settings.get_resolution()[1])
+
         render = self.font.render(
             text=self.text,
-            fgcolor=C_TEXT_DARK if get_dark_mode() else C_TEXT_LIGHT,
+            fgcolor=C_TEXT_DARK if settings.get_dark_mode() else C_TEXT_LIGHT,
             bgcolor=None,
             style=STYLE_DEFAULT,
             rotation=0,
             size=self.font.size
         )
 
-        if get_text_mode() == CORNER:
-            surface.blit(render[0], (self.position[0], self.position[1] - render[1].height))
-        elif get_text_mode() == CENTER:
+        if settings.get_text_mode() == CORNER:
+            surface.blit(render[0], (x, y - render[1].height))
+        elif settings.get_text_mode() == CENTER:
             surface.blit(render[0],
-                         center(self.position, render[1]))
+                         center((x, y), render[1]))
+
+
+def get_padding() -> float:
+    """
+    Get the absolute padding amount.
+
+    :return: the padding amount.
+    """
+    return 15 + (settings.get_resolution()[0] - 1536) * BUTTON_PADDING_SCALAR
 
 
 class Button:
@@ -59,7 +72,7 @@ class Button:
         Constructor.
 
         :param text: button text.
-        :param position: button (x, y) coordinates.
+        :param position: button (x, y) relative position.
         :param font: font family of button text.
         :param event_type: (optional) event type (ID number) to post when
                            this button is clicked.
@@ -76,15 +89,15 @@ class Button:
         if dimensions is None:
             render = self.font.render(
                 text=self.text,
-                fgcolor=C_TEXT_DARK if get_dark_mode() else C_TEXT_LIGHT,
+                fgcolor=C_TEXT_DARK if settings.get_dark_mode() else C_TEXT_LIGHT,
                 bgcolor=None,
                 style=STYLE_DEFAULT,
                 rotation=0,
                 size=self.font.size
             )
             bounds = render[1]
-            self.dimensions = (bounds.width + 2 * BUTTON_PADDING,
-                               self.font.size + 2 * BUTTON_PADDING)
+            self.dimensions = (bounds.width + 2 * get_padding(),
+                               self.font.size + 2 * get_padding())
             self.dimensionsFlag = False
         else:
             self.dimensions = dimensions
@@ -99,52 +112,61 @@ class Button:
 
         :param surface: pygame Surface to draw onto.
         """
+        x, y = self.get_coordinates()
+
         render = self.font.render(
             text=self.text,
-            fgcolor=C_TEXT_DARK if get_dark_mode() else C_TEXT_LIGHT,
+            fgcolor=C_TEXT_DARK if settings.get_dark_mode() else C_TEXT_LIGHT,
             bgcolor=None,
             style=STYLE_DEFAULT,
             rotation=0,
             size=self.font.size
         )
-        if not self.dimensionsFlag:
-            x_adjust = BUTTON_PADDING
-        elif self.text_align == LEFT:
-            x_adjust = BUTTON_PADDING
-        elif self.text_align == CENTER:
+        if not self.dimensionsFlag or self.text_align == CENTER:
             x_adjust = (self.dimensions[0] - render[1].width) / 2
+        elif self.text_align == LEFT:
+            x_adjust = get_padding()
         else:  # self.text_align == RIGHT
-            x_adjust = self.dimensions[0] - render[1].width - BUTTON_PADDING
-        y_adjust = (self.dimensions[1] - self.font.size) / 2 if self.dimensionsFlag else BUTTON_PADDING
+            x_adjust = self.dimensions[0] - render[1].width - get_padding()
+        y_adjust = (self.dimensions[1] - self.font.size) / 2
 
-        if get_button_mode() == CORNER:
+        if settings.get_button_mode() == CORNER:
             pygame.draw.rect(
                 surface,
                 self.get_color(),
-                Rect(self.position[0], self.position[1],
+                Rect(x, y,
                      self.dimensions[0], self.dimensions[1])
             )
             surface.blit(
                 render[0],
-                (self.position[0] + x_adjust,
-                 self.position[1] + y_adjust)
+                (x + x_adjust,
+                 y + y_adjust)
             )
-        elif get_button_mode() == CENTER:
+        elif settings.get_button_mode() == CENTER:
             pygame.draw.rect(
                 surface,
                 self.get_color(),
-                Rect(self.position[0] - self.dimensions[0] / 2,
-                     self.position[1] - self.dimensions[1] / 2,
+                Rect(x - self.dimensions[0] / 2,
+                     y - self.dimensions[1] / 2,
                      self.dimensions[0],
                      self.dimensions[1])
             )
             surface.blit(
                 render[0],
-                (self.position[0] - self.dimensions[0] / 2 + x_adjust,
-                 self.position[1] - self.dimensions[1] / 2 + y_adjust,
+                (x - self.dimensions[0] / 2 + x_adjust,
+                 y - self.dimensions[1] / 2 + y_adjust,
                  self.dimensions[0],
                  self.dimensions[1])
             )
+
+    def get_coordinates(self) -> tuple[float, float]:
+        """
+        Get the absolute coordinates of this button.
+
+        :return: a pair of (x, y) coordinates.
+        """
+        return (self.position[0] * settings.get_resolution()[0],
+                self.position[1] * settings.get_resolution()[1])
 
     def check_click(self) -> None:
         """
@@ -164,13 +186,15 @@ class Button:
         :return: whether the mouse's coordinates are within the bounds of
                  this button.
         """
-        if get_button_mode() == CORNER:
-            return Rect(self.position[0], self.position[1],
+        x, y = self.get_coordinates()
+
+        if settings.get_button_mode() == CORNER:
+            return Rect(x, y,
                         self.dimensions[0], self.dimensions[1]) \
                 .collidepoint(pygame.mouse.get_pos())
-        elif get_button_mode() == CORNER:
-            return Rect(self.position[0] - self.dimensions[0] / 2,
-                        self.position[1] - self.dimensions[1] / 2,
+        elif settings.get_button_mode() == CORNER:
+            return Rect(x - self.dimensions[0] / 2,
+                        y - self.dimensions[1] / 2,
                         self.dimensions[0],
                         self.dimensions[1]
                         ) \
@@ -192,7 +216,7 @@ class Button:
 
         :return: an int 3-tuple for the color's RGB.
         """
-        if get_dark_mode():
+        if settings.get_dark_mode():
             if self.is_pressed():
                 return C_BUTTON_PRESSED_DARK
             if self.is_hovered():

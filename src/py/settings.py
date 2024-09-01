@@ -1,11 +1,10 @@
-"""Global settings."""
+"""Global settings. Note: don't use any of the variables until the first draw,
+as they'll be uninitialized."""
 
-from constants import *
-
-_dark_mode: bool = True
-_text_mode: int = CORNER
-_button_mode: int = CORNER
-_resolution: tuple[int, int] = RESOLUTIONS[0]
+_dark_mode: bool
+_text_mode: int
+_button_mode: int
+_resolution: tuple[int, int]
 
 
 def get_dark_mode() -> bool:
