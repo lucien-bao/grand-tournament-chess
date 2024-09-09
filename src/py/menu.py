@@ -44,9 +44,7 @@ def display(surface: Surface) -> None:
 
     res = get_resolution()
     splash_center = res[0] * 13 / 20, res[1] / 2
-    radius = res[1] / 3.5
-
-    pygame.draw.rect(surface, (255, 255, 255), (*splash_center, 10, 10))
+    radius = res[1] / 3.8
 
     # TODO: left off here. remake icons to be bigger
     for i in range(len(ICONS)):
