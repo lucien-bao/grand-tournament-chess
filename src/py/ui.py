@@ -4,8 +4,7 @@ from pygame import Surface, Rect
 from pygame.freetype import STYLE_DEFAULT
 from pygame.event import post, Event
 
-from constants import *
-import settings
+from settings import *
 
 
 def center(corner: tuple[float, float],
@@ -35,21 +34,21 @@ class Label:
 
         :param surface: pygame Surface to draw onto.
         """
-        x, y = (self.position[0] * settings.get_resolution()[0],
-                self.position[1] * settings.get_resolution()[1])
+        x, y = (self.position[0] * get_resolution()[0],
+                self.position[1] * get_resolution()[1])
 
         render = self.font.render(
             text=self.text,
-            fgcolor=C_TEXT_DARK if settings.get_dark_mode() else C_TEXT_LIGHT,
+            fgcolor=C_TEXT_DARK if get_dark_mode() else C_TEXT_LIGHT,
             bgcolor=None,
             style=STYLE_DEFAULT,
             rotation=0,
             size=self.font.size
         )
 
-        if settings.get_text_mode() == CORNER:
+        if get_text_mode() == CORNER:
             surface.blit(render[0], (x, y - render[1].height))
-        elif settings.get_text_mode() == CENTER:
+        elif get_text_mode() == CENTER:
             surface.blit(render[0],
                          center((x, y), render[1]))
 
@@ -60,8 +59,7 @@ def get_padding() -> float:
 
     :return: the padding amount.
     """
-    print("padding", settings.get_resolution())
-    return 15 + (settings.get_resolution()[0] - 1536) * BUTTON_PADDING_SCALAR
+    return 15 + (get_resolution()[0] - 1536) * BUTTON_PADDING_SCALAR
 
 
 class Button:
@@ -103,12 +101,11 @@ class Button:
 
         :param surface: pygame Surface to draw onto.
         """
-        print("button", settings.get_resolution())
         x, y = self.get_coordinates()
 
         render = self.font.render(
             text=self.text,
-            fgcolor=C_TEXT_DARK if settings.get_dark_mode() else C_TEXT_LIGHT,
+            fgcolor=C_TEXT_DARK if get_dark_mode() else C_TEXT_LIGHT,
             bgcolor=None,
             style=STYLE_DEFAULT,
             rotation=0,
@@ -127,7 +124,7 @@ class Button:
             x_adjust = self.dimensions[0] - render[1].width - get_padding()
         y_adjust = (self.dimensions[1] - self.font.size) / 2
 
-        if settings.get_button_mode() == CORNER:
+        if get_button_mode() == CORNER:
             pygame.draw.rect(
                 surface,
                 self.get_color(),
@@ -139,7 +136,7 @@ class Button:
                 (x + x_adjust,
                  y + y_adjust)
             )
-        elif settings.get_button_mode() == CENTER:
+        elif get_button_mode() == CENTER:
             pygame.draw.rect(
                 surface,
                 self.get_color(),
@@ -162,8 +159,8 @@ class Button:
 
         :return: a pair of (x, y) coordinates.
         """
-        return (self.position[0] * settings.get_resolution()[0],
-                self.position[1] * settings.get_resolution()[1])
+        return (self.position[0] * get_resolution()[0],
+                self.position[1] * get_resolution()[1])
 
     def check_click(self) -> None:
         """
@@ -185,11 +182,11 @@ class Button:
         """
         x, y = self.get_coordinates()
 
-        if settings.get_button_mode() == CORNER:
+        if get_button_mode() == CORNER:
             return Rect(x, y,
                         self.dimensions[0], self.dimensions[1]) \
                 .collidepoint(pygame.mouse.get_pos())
-        elif settings.get_button_mode() == CORNER:
+        elif get_button_mode() == CORNER:
             return Rect(x - self.dimensions[0] / 2,
                         y - self.dimensions[1] / 2,
                         self.dimensions[0],
@@ -213,7 +210,7 @@ class Button:
 
         :return: an int 3-tuple for the color's RGB.
         """
-        if settings.get_dark_mode():
+        if get_dark_mode():
             if self.is_pressed():
                 return C_BUTTON_PRESSED_DARK
             if self.is_hovered():

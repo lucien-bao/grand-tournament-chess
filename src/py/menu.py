@@ -42,7 +42,7 @@ def display(surface: Surface) -> None:
     for component in components:
         component.draw(surface)
 
-    res = settings.get_resolution()
+    res = get_resolution()
     splash_center = res[0] * 13 / 20, res[1] / 2
     radius = res[1] / 3.5
 
