@@ -1,6 +1,8 @@
 """Global settings. Note: don't use any of the variables until the first draw,
 as they'll be uninitialized."""
 
+from constants import *
+
 _dark_mode: bool
 _text_mode: int
 _button_mode: int
@@ -13,7 +15,12 @@ def get_dark_mode() -> bool:
 
     :return: the current dark mode setting.
     """
-    return _dark_mode
+    global _dark_mode
+    try:
+        return _dark_mode
+    except NameError:
+        _dark_mode = True
+        return _dark_mode
 
 
 def set_dark_mode(value: bool) -> None:
@@ -32,7 +39,12 @@ def get_text_mode() -> int:
 
     :return: the current text mode setting.
     """
-    return _text_mode
+    global _text_mode
+    try:
+        return _text_mode
+    except NameError:
+        _text_mode = CORNER
+        return _text_mode
 
 
 def set_text_mode(value: int) -> None:
@@ -53,7 +65,12 @@ def get_button_mode() -> int:
 
     :return: the current button mode setting.
     """
-    return _button_mode
+    global _button_mode
+    try:
+        return _button_mode
+    except NameError:
+        _button_mode = CORNER
+        return _button_mode
 
 
 def set_button_mode(value: int) -> None:
@@ -74,7 +91,12 @@ def get_resolution() -> tuple[int, int]:
 
     :return: the current resolution.
     """
-    return _resolution
+    global _resolution
+    try:
+        return _resolution
+    except NameError:
+        _resolution = (1920, 1080)
+        return _resolution
 
 
 def set_resolution(value: tuple[int, int]) -> None:

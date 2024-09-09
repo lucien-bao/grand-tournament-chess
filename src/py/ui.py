@@ -60,6 +60,7 @@ def get_padding() -> float:
 
     :return: the padding amount.
     """
+    print("padding", settings.get_resolution())
     return 15 + (settings.get_resolution()[0] - 1536) * BUTTON_PADDING_SCALAR
 
 
@@ -86,32 +87,23 @@ class Button:
         self.position = position
         self.font = font
 
-        if dimensions is None:
-            render = self.font.render(
-                text=self.text,
-                fgcolor=C_TEXT_DARK if settings.get_dark_mode() else C_TEXT_LIGHT,
-                bgcolor=None,
-                style=STYLE_DEFAULT,
-                rotation=0,
-                size=self.font.size
-            )
-            bounds = render[1]
-            self.dimensions = (bounds.width + 2 * get_padding(),
-                               self.font.size + 2 * get_padding())
-            self.dimensionsFlag = False
-        else:
+        if dimensions is not None:
             self.dimensions = dimensions
-            self.dimensionsFlag = True
+            self.dimensions_flag = True
+        else:
+            self.dimensions = None
+            self.dimensions_flag = False
 
         self.text_align = text_align
         self.event_type = event_type
 
     def draw(self, surface: Surface) -> None:
         """
-        Draws this label to the given surface.
+        Draws this button to the given surface.
 
         :param surface: pygame Surface to draw onto.
         """
+        print("button", settings.get_resolution())
         x, y = self.get_coordinates()
 
         render = self.font.render(
@@ -122,7 +114,12 @@ class Button:
             rotation=0,
             size=self.font.size
         )
-        if not self.dimensionsFlag or self.text_align == CENTER:
+        bounds = render[1]
+        if not self.dimensions_flag:
+            self.dimensions = (bounds.width + 2 * get_padding(),
+                               self.font.size + 2 * get_padding())
+
+        if self.text_align == CENTER:
             x_adjust = (self.dimensions[0] - render[1].width) / 2
         elif self.text_align == LEFT:
             x_adjust = get_padding()

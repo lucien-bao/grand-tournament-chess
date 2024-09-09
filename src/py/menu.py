@@ -11,27 +11,23 @@ components: list[Button | Label] = []
 #===============================================================================
 # Setup
 #===============================================================================
-def setup() -> None:
-    """
-    Add all components.
-    """
-    title0 = Label("Grand", (0.05, 0.194), F_TITLE)
-    title1 = Label("Tournament", (0.05, 0.296), F_TITLE)
-    title2 = Label("Chess", (0.05, 0.398), F_TITLE)
-    components.append(title0)
-    components.append(title1)
-    components.append(title2)
+title0 = Label("Grand", (0.05, 0.194), F_TITLE)
+title1 = Label("Tournament", (0.05, 0.296), F_TITLE)
+title2 = Label("Chess", (0.05, 0.398), F_TITLE)
+components.append(title0)
+components.append(title1)
+components.append(title2)
 
-    play_button = Button("Play", (0.05, 0.463), F_BUTTON, GO_PLAY)
-    tutorial_button = Button("Tutorial", (0.05, 0.555), F_BUTTON, GO_TUTORIAL)
-    options_button = Button("Options", (0.05, 0.648), F_BUTTON, GO_OPTIONS)
-    credits_button = Button("Credits", (0.05, 0.740), F_BUTTON, GO_CREDITS)
-    quit_button = Button("Quit", (0.05, 0.833), F_BUTTON, QUIT)
-    components.append(play_button)
-    components.append(tutorial_button)
-    components.append(options_button)
-    components.append(credits_button)
-    components.append(quit_button)
+play_button = Button("Play", (0.05, 0.463), F_BUTTON, GO_PLAY)
+tutorial_button = Button("Tutorial", (0.05, 0.555), F_BUTTON, GO_TUTORIAL)
+options_button = Button("Options", (0.05, 0.648), F_BUTTON, GO_OPTIONS)
+credits_button = Button("Credits", (0.05, 0.740), F_BUTTON, GO_CREDITS)
+quit_button = Button("Quit", (0.05, 0.833), F_BUTTON, QUIT)
+components.append(play_button)
+components.append(tutorial_button)
+components.append(options_button)
+components.append(credits_button)
+components.append(quit_button)
 
 
 #===============================================================================
@@ -43,9 +39,6 @@ def display(surface: Surface) -> None:
 
     :param surface: the pygame Surface to draw to,
     """
-    if len(components) == 0:
-        setup()
-
     for component in components:
         component.draw(surface)
 
