@@ -1,5 +1,4 @@
-"""Global settings. Note: don't use any of the variables until the first draw,
-as they'll be uninitialized."""
+"""Global settings."""
 
 from constants import *
 

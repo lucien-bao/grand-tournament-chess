@@ -1,4 +1,5 @@
 """General UI components."""
+
 import pygame.mouse
 from pygame import Surface, Rect
 from pygame.freetype import STYLE_DEFAULT
@@ -14,7 +15,20 @@ def center(corner: tuple[float, float],
             corner[1] - dimensions.height / 2)
 
 
-class Label:
+class Drawable:
+    """
+    A UI component that can be drawn to the screen.
+    """
+
+    def draw(self, surface: Surface) -> None:
+        pass
+
+
+class Label(Drawable):
+    """
+    Component that simply renders a line of text.
+    """
+
     def __init__(self, text: str, position: tuple[float, float],
                  font: Font) -> None:
         """
@@ -62,7 +76,12 @@ def get_padding() -> float:
     return 15 + (get_resolution()[0] - 1536) * BUTTON_PADDING_SCALAR
 
 
-class Button:
+class Button(Drawable):
+    """
+    Component that renders a button to the screen and detects
+    some mouse events.
+    """
+
     def __init__(self, text: str, position: tuple[float, float],
                  font: Font, event_type: int = None,
                  dimensions: tuple[float, float] = None,

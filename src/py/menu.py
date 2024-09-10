@@ -1,11 +1,12 @@
 """Menu screen."""
+
 from math import sin, cos, pi
 
 from pygame.locals import *
 
 from ui import *
 
-components: list[Button | Label] = []
+components: list[Drawable] = []
 
 
 #===============================================================================
