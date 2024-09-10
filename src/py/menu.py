@@ -46,7 +46,6 @@ def display(surface: Surface) -> None:
     splash_center = res[0] * 13 / 20, res[1] / 2
     radius = res[1] / 3.8
 
-    # TODO: left off here. remake icons to be bigger
     for i in range(len(ICONS)):
         angle = i * (2 * pi / len(ICONS)) + 0.5  # radians
         x = radius * cos(angle)

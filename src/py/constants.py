@@ -59,8 +59,8 @@ C_LIGHT_SQUARE = (180, 180, 180)
 # Fonts
 #===============================================================================
 pygame.freetype.init()
-F_TITLE = Font("../../res/font/Roboto-Medium.ttf", 96)
-F_BUTTON = Font("../../res/font/Roboto-Medium.ttf", 48)
+F_TITLE = Font("../../res/font/PlusJakartaSans-Bold.ttf", 96)
+F_BUTTON = Font("../../res/font/PlusJakartaSans-SemiBold.ttf", 48)
 
 #===============================================================================
 # Events
