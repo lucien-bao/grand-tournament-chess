@@ -23,6 +23,7 @@ pygame.display.set_icon(
 )
 
 screen = MENU
+screens = [menu]
 set_dark_mode(True)
 set_text_mode(CORNER)
 set_button_mode(CORNER)
@@ -46,11 +47,9 @@ def draw() -> None:
     """
     display.fill(C_BACKGROUND_DARK if get_dark_mode()
                  else C_BACKGROUND_LIGHT)
-    # TODO: draw board + ui
 
-    if screen == MENU:
-        menu.display(display)
-        menu.update()
+    screens[screen].display(display)
+    screens[screen].update()
 
     pygame.display.update()
 

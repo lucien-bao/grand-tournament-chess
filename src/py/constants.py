@@ -28,7 +28,7 @@ class Piece:
         self.white = pygame.image.load(f"../../res/pieces/{army}/w{file}.png")
 
 
-with open("pieces.csv") as csv:
+with open("../pieces.csv") as csv:
     csv.readline()  # discard header line
     data: list[str] = csv.readlines()
     PIECES = [Piece(*line.strip().split(",")) for line in data]
