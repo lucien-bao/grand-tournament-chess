@@ -205,7 +205,7 @@ class Button(Drawable):
             return Rect(x, y,
                         self.dimensions[0], self.dimensions[1]) \
                 .collidepoint(pygame.mouse.get_pos())
-        elif get_button_mode() == CORNER:
+        elif get_button_mode() == CENTER:
             return Rect(x - self.dimensions[0] / 2,
                         y - self.dimensions[1] / 2,
                         self.dimensions[0],
@@ -241,6 +241,144 @@ class Button(Drawable):
             if self.is_hovered():
                 return C_BUTTON_HOVER_LIGHT
             return C_BUTTON_LIGHT
+
+
+class TextBox(Drawable):
+    """
+    An interactable area for inputting one line of text.
+    """
+
+    def __init__(self, position: tuple[float, float],
+                 width: float, font: Font, prompt: str = None) -> None:
+        """
+        Constructor.
+
+        :param position: text box relative (x, y) position.
+        :param width: text box relative width.
+        :param font: font family of entered text and prompted text
+                     (if prompt is specified).
+        :param prompt: (optional) text to show when text box is empty.
+        """
+        self.position = position
+        self.width = width
+        self.font = font
+        if prompt is None:
+            self.prompt = ""
+        else:
+            self.prompt = prompt
+        self.text = ""
+        self.selected = False
+
+    def draw(self, surface: Surface) -> None:
+        """
+        Draw this text box to the given surface.
+
+        :param surface: the surface to draw to.
+        """
+        x, y = self.get_coordinates()
+        w, h = self.get_width(), self.font.size + 2 * get_padding()
+
+        # TODO: "caret" simulation
+        text_to_render = self.text if len(self.text) > 0 else self.prompt
+        if get_dark_mode():
+            text_color = C_TEXT_DARK if len(self.text) > 0\
+                else C_TEXT_PROMPT_DARK
+            box_color = C_TEXT_BOX_ACTIVE_DARK if self.selected\
+                else C_TEXT_BOX_DARK
+        else:
+            text_color = C_TEXT_LIGHT if len(self.text) > 0\
+                else C_TEXT_PROMPT_LIGHT
+            box_color = C_TEXT_BOX_ACTIVE_LIGHT if self.selected\
+                else C_TEXT_BOX_ACTIVE_LIGHT
+        render = self.font.render(
+            text=text_to_render,
+            fgcolor=text_color,
+            bgcolor=None,
+            style=STYLE_DEFAULT,
+            rotation=0,
+            size=self.font.size
+        )
+
+        if get_button_mode() == CORNER:
+            pygame.draw.rect(
+                surface,
+                box_color,
+                Rect(x, y, w, h)
+            )
+            surface.blit(
+                render[0],
+                (x + get_padding(),
+                 y + get_padding())
+            )
+        elif get_button_mode() == CENTER:
+            pygame.draw.rect(
+                surface,
+                box_color,
+                Rect(x - w / 2, y - h / 2, w, h)
+            )
+            surface.blit(
+                render[0],
+                (x - w / 2 + get_padding(),
+                 y - h / 2 + get_padding())
+            )
+
+    def get_coordinates(self) -> tuple[float, float]:
+        """
+        Get the absolute coordinates of this text box.
+
+        :return: a pair of (x, y) coordinates.
+        """
+        return (self.position[0] * get_resolution()[0],
+                self.position[1] * get_resolution()[1])
+
+    def get_width(self) -> float:
+        """
+        Get the absolute width of this text box.
+
+        :return: width in pixels.
+        """
+        return self.width * get_resolution()[0]
+
+    def check_click(self) -> None:
+        """
+        Should be called on each frame; checks if this text box is clicked,
+        and if so, selects this text box as active. If the mouse is clicked
+        outside the text box, unselects this text box.
+        """
+        if pygame.mouse.get_pressed()[0]:
+            self.selected = self.is_hovered()
+
+    def check_type(self, key_down: Event) -> None:
+        """
+        Should be called on each key down event; checks if this text box
+        is active, and if so, updates the text state.
+
+        :param key_down: pygame key down event.
+        """
+        if not self.selected:
+            return
+
+        if key_down.key == pygame.K_BACKSPACE:
+            self.text = self.text[:-1]
+        else:
+            self.text += key_down.unicode
+
+    def is_hovered(self) -> bool:
+        """
+        Get whether the mouse is currently hovering above this button.
+        Ignores the presence of occluding objects.
+
+        :return: whether the mouse's coordinates are within the bounds of
+                 this button.
+        """
+        x, y = self.get_coordinates()
+        w, h = self.get_width(), self.font.size + 2 * get_padding()
+
+        if get_button_mode() == CORNER:
+            return Rect(x, y, w, y).collidepoint(pygame.mouse.get_pos())
+        elif get_button_mode() == CENTER:
+            return Rect(x - w / 2, y - h / 2, w, h) \
+                .collidepoint(pygame.mouse.get_pos())
 
 
 class Transition:

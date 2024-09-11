@@ -19,7 +19,7 @@ components.append(title0)
 components.append(title1)
 components.append(title2)
 
-play_button = Button("Play", (0.05, 0.463), F_BUTTON, GO_PLAY)
+play_button = Button("Play", (0.05, 0.463), F_BUTTON, GO_CHOOSE)
 tutorial_button = Button("Tutorial", (0.05, 0.555), F_BUTTON, GO_TUTORIAL)
 options_button = Button("Options", (0.05, 0.648), F_BUTTON, GO_OPTIONS)
 credits_button = Button("Credits", (0.05, 0.740), F_BUTTON, GO_CREDITS)

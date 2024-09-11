@@ -43,14 +43,23 @@ ICONS = [pygame.image.load(f"../../res/pieces/{folder}/icon.png")
 #===============================================================================
 C_BACKGROUND_DARK = (30, 30, 30)
 C_BACKGROUND_LIGHT = (210, 210, 210)
+
 C_TEXT_DARK = (255, 255, 255)
 C_TEXT_LIGHT = (0, 0, 0)
+C_TEXT_PROMPT_DARK = (127, 127, 127)
+C_TEXT_PROMPT_LIGHT = (127, 127, 127)
+
 C_BUTTON_DARK = (60, 60, 60)
 C_BUTTON_LIGHT = (160, 160, 160)
 C_BUTTON_HOVER_DARK = (50, 50, 50)
 C_BUTTON_HOVER_LIGHT = (140, 140, 140)
 C_BUTTON_PRESSED_DARK = (40, 40, 40)
 C_BUTTON_PRESSED_LIGHT = (100, 100, 100)
+
+C_TEXT_BOX_DARK = (50, 50, 50)
+C_TEXT_BOX_LIGHT = (200, 200, 200)
+C_TEXT_BOX_ACTIVE_DARK = (80, 80, 80)
+C_TEXT_BOX_ACTIVE_LIGHT = (170, 170, 170)
 
 C_DARK_SQUARE = (80, 30, 80)
 C_LIGHT_SQUARE = (180, 180, 180)
@@ -66,15 +75,17 @@ F_BUTTON = Font("../../res/font/PlusJakartaSans-SemiBold.ttf", 48)
 # Events
 #===============================================================================
 GO_MENU = USEREVENT
-GO_PLAY = USEREVENT + 1
-GO_TUTORIAL = USEREVENT + 2
-GO_OPTIONS = USEREVENT + 3
-GO_CREDITS = USEREVENT + 4
+GO_CHOOSE = USEREVENT + 1
+GO_PLAY = USEREVENT + 2
+GO_TUTORIAL = USEREVENT + 3
+GO_OPTIONS = USEREVENT + 4
+GO_CREDITS = USEREVENT + 5
 
 #===============================================================================
 # Screens
 #===============================================================================
 MENU = 0
+CHOOSE = 1
 
 #===============================================================================
 # Miscellaneous

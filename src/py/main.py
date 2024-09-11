@@ -6,7 +6,7 @@ import pygame.display
 from pygame.locals import *
 
 from settings import *
-import menu
+import menu, choose
 
 #===============================================================================
 # Setup
@@ -23,7 +23,7 @@ pygame.display.set_icon(
 )
 
 screen = MENU
-screens = [menu]
+screens = [menu, choose]
 set_dark_mode(True)
 set_text_mode(CORNER)
 set_button_mode(CORNER)
@@ -35,10 +35,14 @@ def handle_events() -> None:
     Polls all events from the pygame event queue and handles
     dispatches.
     """
+    global screen
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        elif event.type == GO_CHOOSE:
+            screen = CHOOSE
 
 
 def draw() -> None:
