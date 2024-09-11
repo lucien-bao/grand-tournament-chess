@@ -70,6 +70,7 @@ C_LIGHT_SQUARE = (180, 180, 180)
 pygame.freetype.init()
 F_TITLE = Font("../../res/font/PlusJakartaSans-Bold.ttf", 96)
 F_BUTTON = Font("../../res/font/PlusJakartaSans-SemiBold.ttf", 48)
+# TODO: subtitle font
 
 #===============================================================================
 # Events
@@ -96,3 +97,5 @@ CENTER = 2
 RIGHT = 3
 
 BUTTON_PADDING_SCALAR = 0.02
+
+CARET_BLINK_PERIOD = 90  # in frames

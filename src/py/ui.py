@@ -268,6 +268,7 @@ class TextBox(Drawable):
             self.prompt = prompt
         self.text = ""
         self.selected = False
+        self.caret_frame_count = 0
 
     def draw(self, surface: Surface) -> None:
         """
@@ -346,7 +347,12 @@ class TextBox(Drawable):
         outside the text box, unselects this text box.
         """
         if pygame.mouse.get_pressed()[0]:
-            self.selected = self.is_hovered()
+            if self.is_hovered():
+                self.selected = True
+                self.caret_frame_count = 0
+                # TODO: use caret frame count to animate caret
+            else:
+                self.selected = False
 
     def check_type(self, key_down: Event) -> None:
         """
@@ -375,7 +381,7 @@ class TextBox(Drawable):
         w, h = self.get_width(), self.font.size + 2 * get_padding()
 
         if get_button_mode() == CORNER:
-            return Rect(x, y, w, y).collidepoint(pygame.mouse.get_pos())
+            return Rect(x, y, w, h).collidepoint(pygame.mouse.get_pos())
         elif get_button_mode() == CENTER:
             return Rect(x - w / 2, y - h / 2, w, h) \
                 .collidepoint(pygame.mouse.get_pos())

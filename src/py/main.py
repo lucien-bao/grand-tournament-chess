@@ -38,11 +38,16 @@ def handle_events() -> None:
     global screen
 
     for event in pygame.event.get():
+        # Menu
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
         elif event.type == GO_CHOOSE:
             screen = CHOOSE
+
+        # Choose
+        elif event.type == KEYDOWN:
+            choose.send_key_down(event)
 
 
 def draw() -> None:
